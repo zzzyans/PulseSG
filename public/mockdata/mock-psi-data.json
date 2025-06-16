@@ -1,0 +1,8 @@
+
+[
+  { "id": 1, "region": "North", "psi": 45, "descriptor": "Good" },
+  { "id": 2, "region": "South", "psi": 52, "descriptor": "Moderate" },
+  { "id": 3, "region": "East", "psi": 48, "descriptor": "Good" },
+  { "id": 4, "region": "West", "psi": 55, "descriptor": "Moderate" },
+  { "id": 5, "region": "Central", "psi": 51, "descriptor": "Moderate" }
+]
