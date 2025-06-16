@@ -2,26 +2,40 @@
 import Link from "next/link";
 import { getDengueData, getPsiData } from "@/lib/data";
 import HighlightCard from "@/components/HighlightCard";
+import { DengueFeature } from "@/types"; // Import the specific feature type
 
-// Icons
+// --- ICONS ---
 const BugIcon = () => <span className="text-red-600">🦟</span>;
 const CloudIcon = () => <span className="text-orange-500">☁️</span>;
 
+// --- MAIN PAGE COMPONENT ---
 export default async function OverviewPage() {
-  const [dengueData, psiData] = await Promise.all([
+  // Fetch all required data in parallel
+  const [dengueApiResponse, psiData] = await Promise.all([
     getDengueData(),
     getPsiData(),
   ]);
 
-  const topDengueCluster = dengueData
-    ? [...dengueData].sort((a, b) => b.caseCount - a.caseCount)[0]
-    : null;
-  const topPsiRegion = psiData
-    ? [...psiData].sort((a, b) => b.psi - a.psi)[0]
-    : null;
+  // --- DATA PROCESSING & ANALYSIS ---
+
+  // --- FIX APPLIED HERE ---
+  // Add safety checks and access the correct nested array
+  const topDengueCluster =
+    dengueApiResponse &&
+    dengueApiResponse.geoJsonData &&
+    dengueApiResponse.geoJsonData.features.length > 0
+      ? [...(dengueApiResponse.geoJsonData.features as DengueFeature[])].sort(
+          (a, b) => b.properties.CASE_SIZE - a.properties.CASE_SIZE
+        )[0]
+      : null;
+
+  const topPsiRegion =
+    psiData && psiData.length > 0
+      ? [...psiData].sort((a, b) => b.psi - a.psi)[0]
+      : null;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="main-container">
       <div className="mb-10">
         <h2 className="text-3xl font-bold text-slate-900">Health Overview</h2>
         <p className="text-lg text-slate-600 mt-1">
@@ -39,11 +53,12 @@ export default async function OverviewPage() {
               level="high"
               icon={<BugIcon />}
               title="Primary Dengue Hotspot"
-              value={`${topDengueCluster.caseCount} cases`}
-              description={`in ${topDengueCluster.location}. Click for detailed map.`}
+              value={`${topDengueCluster.properties.CASE_SIZE} cases`}
+              description={`in ${topDengueCluster.properties.LOCALITY}. Click for detailed map.`}
             />
           </Link>
         )}
+
         {topPsiRegion && (
           <Link
             href="/psi"
