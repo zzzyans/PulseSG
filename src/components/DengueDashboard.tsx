@@ -1,31 +1,31 @@
 // src/components/DengueDashboard.tsx
-"use client"; // <-- This is the most important line! It marks this as a Client Component.
+"use client";
 
-import { DengueCluster } from "@/types";
+import { HealthApiResponse } from "@/types";
 import DataCard from "@/components/DataCard";
 import ClusterList from "@/components/ClusterList";
 import dynamic from "next/dynamic";
 
-// Now, this dynamic import is happening inside a Client Component, which is allowed.
 const MapDisplay = dynamic(() => import("@/components/MapDisplay"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-slate-200 rounded-lg flex items-center justify-center">
-      <p className="text-slate-500">Loading Map...</p>
-    </div>
-  ),
+  loading: () => <div className="w-full h-full bg-slate-200 rounded-lg" />,
 });
 
-// This component receives the data fetched by the server page as a prop.
 export default function DengueDashboard({
-  dengueData,
+  initialData,
 }: {
-  dengueData: DengueCluster[] | null;
+  initialData: HealthApiResponse | null;
 }) {
-  const totalCases = dengueData
-    ? dengueData.reduce((sum, c) => sum + c.caseCount, 0)
-    : 0;
-  const totalClusters = dengueData ? dengueData.length : 0;
+  if (!initialData) {
+    return (
+      <div className="text-center text-red-500">
+        Could not load dengue data. Please try again later.
+      </div>
+    );
+  }
+
+  // Destructure the data for easier use
+  const { geoJsonData, summary } = initialData;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,20 +34,28 @@ export default function DengueDashboard({
           Dengue Outbreak Dashboard
         </h2>
         <p className="text-slate-500">
-          Detailed overview of active dengue clusters.
+          Data sourced from data.gov.sg as of{" "}
+          {new Date(initialData.sourceDate || Date.now()).toLocaleDateString()}.
         </p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 flex flex-col gap-8">
           <DataCard
             title="Total Active Cases"
-            value={totalCases}
+            value={summary.totalCases}
             description="Sum of cases in all clusters."
           />
-          <ClusterList clusters={dengueData || []} />
+          <DataCard
+            title="Active Clusters"
+            value={summary.totalClusters}
+            description="Number of high-risk areas."
+          />
+          {/* The ClusterList component might need a small update if its props change */}
+          <ClusterList geoJsonData={geoJsonData} />
         </div>
         <div className="lg:col-span-2 min-h-[500px]">
-          <MapDisplay clusters={dengueData || []} />
+          {/* The MapDisplay component now receives the full GeoJSON object */}
+          <MapDisplay geoJsonData={geoJsonData} />
         </div>
       </div>
     </div>
