@@ -1,0 +1,27 @@
+
+[
+  {
+    "id": 1,
+    "location": "Jurong West St 91",
+    "caseCount": 22,
+    "geometry": { "type": "Polygon", "coordinates": []  }
+  },
+  {
+    "id": 2,
+    "location": "Tampines Ave 5",
+    "caseCount": 15,
+    "geometry": { "type": "Polygon", "coordinates": [] }
+  },
+  {
+    "id": 3,
+    "location": "Bedok Reservoir Rd",
+    "caseCount": 8,
+    "geometry": { "type": "Polygon", "coordinates": [] }
+  },
+  {
+    "id": 4,
+    "location": "Woodlands Dr 50",
+    "caseCount": 4,
+    "geometry": { "type": "Polygon", "coordinates": []  }
+  }
+]
