@@ -100,7 +100,7 @@ export default function PsiMap({ summary }: PsiMapProps) {
         />
         <GeoJSON
           key={JSON.stringify(geoJsonData)}
-          data={geoJsonData as any}
+          data={geoJsonData}
           style={styleFeature}
           onEachFeature={onEachFeature}
           pointToLayer={pointToLayer}

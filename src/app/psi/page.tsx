@@ -1,4 +1,5 @@
 // src/app/psi/page.tsx
+export const dynamic = 'force-dynamic';
 import { getCombinedHealthData } from "@/lib/data";
 import PsiDashboard from "@/components/PsiDashboard";
 

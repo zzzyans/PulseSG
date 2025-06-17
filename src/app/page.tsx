@@ -1,4 +1,5 @@
 // src/app/page.tsx
+export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import { getCombinedHealthData } from "@/lib/data";
 import HighlightCard from "@/components/HighlightCard";

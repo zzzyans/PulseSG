@@ -3,16 +3,14 @@
 
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { DengueFeature } from "@/types";
+import { DengueFeature } from "@/types"; 
 import type { LatLngExpression, Layer } from "leaflet";
 
-
-//  matches the official Red/Yellow alert system.
 function getAlertColor(caseCount: number): string {
   if (caseCount >= 10) {
-    return "#D93025"; // Official Red Alert Color
+    return "#D93025"; 
   }
-  return "#F29900"; // Official Yellow Alert Color
+  return "#F29900"; 
 }
 
 interface MapDisplayProps {
@@ -22,22 +20,22 @@ interface MapDisplayProps {
 export default function MapDisplay({ geoJsonData }: MapDisplayProps) {
   const position: LatLngExpression = [1.3521, 103.8198];
 
-  // styles each cluster polygon based on its alert level
-  const styleFeature = (feature?: DengueFeature) => {
-    const caseCount = feature?.properties?.CASE_SIZE || 0;
+  const styleFeature = (feature?: GeoJSON.Feature) => {
+    const props = feature?.properties as DengueFeature["properties"];
+    const caseCount = props?.CASE_SIZE || 0;
     return {
       fillColor: getAlertColor(caseCount),
       weight: 1,
       opacity: 1,
       color: "white",
-      fillOpacity: 0.65, // Slightly adjusted for better map visibility
+      fillOpacity: 0.65,
     };
   };
 
-  // popup to each cluster
-  const onEachFeature = (feature: DengueFeature, layer: Layer) => {
-    if (feature.properties) {
-      const { LOCALITY, CASE_SIZE } = feature.properties;
+  const onEachFeature = (feature: GeoJSON.Feature, layer: Layer) => {
+    const props = feature.properties as DengueFeature["properties"];
+    if (props) {
+      const { LOCALITY, CASE_SIZE } = props;
       const alertLevel = CASE_SIZE >= 10 ? "Red Alert" : "Yellow Alert";
       const alertColor = getAlertColor(CASE_SIZE);
 
@@ -67,8 +65,8 @@ export default function MapDisplay({ geoJsonData }: MapDisplayProps) {
       {geoJsonData && (
         <GeoJSON
           data={geoJsonData}
-          style={styleFeature as any}
-          onEachFeature={onEachFeature as any}
+          style={styleFeature}
+          onEachFeature={onEachFeature}
         />
       )}
     </MapContainer>

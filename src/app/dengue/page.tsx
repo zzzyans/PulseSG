@@ -1,4 +1,5 @@
 // src/app/dengue/page.tsx
+export const dynamic = 'force-dynamic';
 import { getCombinedHealthData } from "@/lib/data";
 import DengueDashboard from "@/components/DengueDashboard";
 

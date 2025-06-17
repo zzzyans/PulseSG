@@ -27,7 +27,10 @@ export interface CombinedHealthData {
       };
     }[];
   };
-  geoJsonData: GeoJSON.FeatureCollection;
+  geoJsonData: GeoJSON.FeatureCollection<
+    DengueFeature["geometry"],
+    DengueFeature["properties"]
+  >;
   sourceDate: string;
 }
 
@@ -39,4 +42,10 @@ export interface DengueFeature extends GeoJSON.Feature {
     CASE_SIZE: number;
   };
   geometry: GeoJSON.Polygon;
+}
+
+export interface DengueCluster {
+  id: string;
+  location: string;
+  caseCount: number;
 }

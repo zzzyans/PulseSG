@@ -28,7 +28,7 @@ function PsiRegionItem({ regionData }: { regionData: RegionData }) {
       if (!response.ok) throw new Error("Server error");
       const result = await response.json();
       setSendStatus(`Success: ${result.message}`);
-    } catch (error) {
+    } catch {
       setSendStatus("Error: Failed to dispatch alert.");
     } finally {
       setIsSending(false);
@@ -57,7 +57,7 @@ function PsiRegionItem({ regionData }: { regionData: RegionData }) {
         <button
           onClick={handleDispatchAlert}
           disabled={isSending}
-          className="bg-red-500 text-white px-4 py-1.5 rounded-md text-xs font-bold hover:bg-orange-600 transition-colors disabled:bg-orange-300"
+          className="bg-red-600 text-white px-4 py-1.5 rounded-md text-xs font-bold hover:bg-orange-600 transition-colors disabled:bg-orange-300"
         >
           {isSending ? "Sending..." : "Dispatch Alert"}
         </button>
@@ -77,16 +77,14 @@ function PsiRegionItem({ regionData }: { regionData: RegionData }) {
   );
 }
 
-// The main list component now expects the 'regions' object from the API.
 export default function PsiRegionList({
   regions,
 }: {
   regions: { [key: string]: number };
 }) {
   
-  // We need to transform the regions object into an array to map over it.
   const regionArray = Object.entries(regions).map(([key, value]) => ({
-    id: key, // Use the region name as a key
+    id: key, 
     region: key,
     psi: value,
     descriptor: value > 100 ? "Unhealthy" : value > 50 ? "Moderate" : "Good",
