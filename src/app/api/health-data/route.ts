@@ -42,7 +42,7 @@ const processPsiData = (psiApiResponse: any) => {
     console.error("PSI API Error: 'psi_twenty_four_hourly' object could not be found.");
     return { nationwideAverage: 0, regions: {}, regionMetadata: [] };
   }
-
+  
   // 1. Create an array of the regional PSI numbers.
   const regionalValues = [
     readings.north,
