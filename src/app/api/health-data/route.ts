@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import type { Feature, Geometry, FeatureCollection } from "geojson";
 
-// --- FIX: Define specific types for all data structures ---
-
 // 1. Types for Dengue Data
 interface DengueFeatureProperties {
   CASE_SIZE: string;
@@ -55,8 +53,6 @@ interface Cache {
   data: FinalData | null;
   lastFetchDate: string;
 }
-
-// --- FIX: Apply types to function parameters ---
 
 const processDengueData = (geoJsonData: DengueGeoJson): DengueSummary => {
   if (
@@ -143,13 +139,11 @@ const processPsiData = (psiApiResponse: PsiApiResponse): PsiSummary => {
   };
 };
 
-// --- FIX: Type the cache object ---
 let cache: Cache = {
   data: null,
   lastFetchDate: "",
 };
 
-// --- FIX: Prefix unused parameters with an underscore ---
 export async function GET() {
   const today = new Date();
   const dateString = today.toISOString().split("T")[0];
@@ -165,7 +159,7 @@ export async function GET() {
   try {
     const [denguePollResponse, psiResponse] = await Promise.all([
       axios.get(denguePollUrl),
-      axios.get<PsiApiResponse>(psiUrl), // Type the axios response
+      axios.get<PsiApiResponse>(psiUrl), 
     ]);
 
     if (denguePollResponse.data.code !== 0)
@@ -190,7 +184,6 @@ export async function GET() {
 
     return NextResponse.json(finalData);
   } catch (_error) {
-    // FIX: Changed 'error' to '_error' as it's not being used.
     console.error("Failed to fetch combined data:", _error);
     return NextResponse.json(
       { message: "Failed to fetch or process combined health data." },
