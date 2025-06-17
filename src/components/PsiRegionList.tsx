@@ -84,7 +84,7 @@ export default function PsiRegionList({
 }) {
   
   const regionArray = Object.entries(regions)
-  .filter(([key, _value]) => key !== "national")
+  .filter(([key]) => key !== "national")
   .map(([key, value]) => ({
     id: key, 
     region: key,
