@@ -58,11 +58,9 @@ export default function Dashboard({ healthData }: DashboardProps) {
                 value={dengueSummary?.totalClusters ?? 0}
                 description="Number of active outbreak areas."
               />
-              {/* FIX: Convert a potential 'undefined' to 'null' */}
               <ClusterList geoJsonData={dengueGeoJson ?? null} />
             </div>
             <div className="lg:col-span-2 min-h-[500px]">
-              {/* FIX: Apply the same fix here for consistency */}
               <DengueMap geoJsonData={dengueGeoJson ?? null} />
             </div>
           </div>
