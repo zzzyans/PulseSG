@@ -1,9 +1,10 @@
 // src/app/layout.tsx
 
-import "./globals.css"; // <-- THIS IS THE CRUCIAL LINE THAT IS LIKELY MISSING
+import "./globals.css"; 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "@/components/Header";
+import NotificationSubscriber from "@/components/NotificationSubscriber";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-slate-100 text-slate-900 antialiased`}
       >
+        {process.env.NODE_ENV === "development" && <NotificationSubscriber />}
         <Header />
         <main className="py-8">{children}</main>
       </body>

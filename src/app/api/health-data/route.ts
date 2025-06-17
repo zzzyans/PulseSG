@@ -41,6 +41,7 @@ const processPsiData = (psiApiResponse: any) => {
     console.error("PSI API Error: 'items' array is missing or empty.");
     return { nationwideAverage: 0, regions: {}, regionMetadata: [] };
   }
+<<<<<<< replace-mock-psi-data
 
   const readings = psiData.items[0]?.readings?.psi_twenty_four_hourly;
   if (!readings) {
@@ -49,6 +50,17 @@ const processPsiData = (psiApiResponse: any) => {
   }
 
   const regionMetadata = psiData.regionMetadata || [];
+=======
+  
+  // 1. Create an array of the regional PSI numbers.
+  const regionalValues = [
+    readings.north,
+    readings.south,
+    readings.east,
+    readings.west,
+    readings.central,
+  ].filter((value): value is number => typeof value === 'number'); // Filter out any undefined/null values
+>>>>>>> main
 
   const regionalValues = Object.values(readings).filter(
     (value): value is number => typeof value === 'number'
