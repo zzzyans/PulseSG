@@ -83,6 +83,7 @@ export default function PsiRegionList({
 }: {
   regions: { [key: string]: number };
 }) {
+  
   // We need to transform the regions object into an array to map over it.
   const regionArray = Object.entries(regions).map(([key, value]) => ({
     id: key, // Use the region name as a key
@@ -96,11 +97,13 @@ export default function PsiRegionList({
       <h3 className="font-bold text-lg mb-2 text-slate-900">
         PSI by Region
       </h3>
+
       <div>
         {regionArray.map((region) => (
           <PsiRegionItem key={region.id} regionData={region} />
         ))}
       </div>
+
     </div>
   );
 }

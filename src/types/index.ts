@@ -21,7 +21,7 @@ export interface CombinedHealthData {
     };
     regionMetadata: {
       name: string;
-      label_location: {
+      labelLocation: {
         latitude: number;
         longitude: number;
       };

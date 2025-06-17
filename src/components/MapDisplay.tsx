@@ -6,8 +6,8 @@ import "leaflet/dist/leaflet.css";
 import { DengueFeature } from "@/types";
 import type { LatLngExpression, Layer } from "leaflet";
 
-// --- UPDATED COLOR LOGIC ---
-// This now matches the official Red/Yellow alert system.
+
+//  matches the official Red/Yellow alert system.
 function getAlertColor(caseCount: number): string {
   if (caseCount >= 10) {
     return "#D93025"; // Official Red Alert Color
@@ -22,7 +22,7 @@ interface MapDisplayProps {
 export default function MapDisplay({ geoJsonData }: MapDisplayProps) {
   const position: LatLngExpression = [1.3521, 103.8198];
 
-  // This function styles each cluster polygon based on its alert level
+  // styles each cluster polygon based on its alert level
   const styleFeature = (feature?: DengueFeature) => {
     const caseCount = feature?.properties?.CASE_SIZE || 0;
     return {
@@ -34,7 +34,7 @@ export default function MapDisplay({ geoJsonData }: MapDisplayProps) {
     };
   };
 
-  // This function adds a popup to each cluster
+  // popup to each cluster
   const onEachFeature = (feature: DengueFeature, layer: Layer) => {
     if (feature.properties) {
       const { LOCALITY, CASE_SIZE } = feature.properties;

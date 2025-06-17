@@ -1,6 +1,5 @@
 // src/components/PsiDashboard.tsx
 "use client";
-
 import { CombinedHealthData } from "@/types";
 import DataCard from "@/components/DataCard";
 import PsiRegionList from "@/components/PsiRegionList";
@@ -8,11 +7,7 @@ import dynamic from "next/dynamic";
 
 const PsiMap = dynamic(() => import("@/components/PsiMap"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-slate-200 rounded-lg flex items-center justify-center">
-      <p className="text-slate-500">Loading Map...</p>
-    </div>
-  ),
+  loading: () => <div className="w-full h-full bg-slate-200 rounded-lg" />,
 });
 
 // Add 'sourceDate' to the list of expected props.
@@ -26,13 +21,8 @@ export default function PsiDashboard({
   sourceDate, 
 }: PsiDashboardProps) {
   if (!summary) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-10">
-        Loading PSI Data...
-      </div>
-    );
+    return <div className="text-center">Loading PSI Data...</div>;
   }
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
@@ -55,7 +45,6 @@ export default function PsiDashboard({
           <PsiRegionList regions={summary.regions} />
         </div>
         <div className="lg:col-span-2 min-h-[500px]">
-          {/* The PsiMap component now correctly receives the summary data */}
           <PsiMap summary={summary} />
         </div>
       </div>
