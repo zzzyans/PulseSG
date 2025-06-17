@@ -3,7 +3,7 @@ import { CombinedHealthData } from "../types";
 
 export async function getCombinedHealthData(): Promise<CombinedHealthData | null> {
   try {
-    const apiUrl = `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'http://localhost:3000'}/api/health-data`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/health-data`;
     const res = await fetch(apiUrl, { cache: "no-store" });
     if (!res.ok) throw new Error(`API fetch failed: ${res.statusText}`);
     return res.json();
