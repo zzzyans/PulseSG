@@ -20,8 +20,6 @@ export default function DengueDashboard({
   summary: CombinedHealthData["dengueSummary"] | null;
   sourceDate: string | null;
 }) {
-  // FIX: The 'dengueClustersForList' useMemo block has been removed.
-  // ClusterList will now receive the raw geoJsonData and process it internally.
 
   if (!summary || !geoJsonData) {
     return (
