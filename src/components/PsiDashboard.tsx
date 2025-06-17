@@ -6,7 +6,6 @@ import DataCard from "@/components/DataCard";
 import PsiRegionList from "@/components/PsiRegionList";
 import dynamic from "next/dynamic";
 
-// Dynamically import the NEW PsiMap component
 const PsiMap = dynamic(() => import("@/components/PsiMap"), {
   ssr: false,
   loading: () => (
@@ -16,11 +15,16 @@ const PsiMap = dynamic(() => import("@/components/PsiMap"), {
   ),
 });
 
+// Add 'sourceDate' to the list of expected props.
+interface PsiDashboardProps {
+  summary: CombinedHealthData["psiSummary"] | null;
+  sourceDate: string | null;
+}
+
 export default function PsiDashboard({
   summary,
-}: {
-  summary: CombinedHealthData["psiSummary"] | null;
-}) {
+  sourceDate, 
+}: PsiDashboardProps) {
   if (!summary) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-10">
@@ -35,8 +39,10 @@ export default function PsiDashboard({
         <h2 className="text-2xl font-bold text-slate-800">
           Haze (PSI) Dashboard
         </h2>
+        {/* Display the date the data was sourced. */}
         <p className="text-slate-500">
-          Live Pollutant Standards Index (PSI) readings across Singapore.
+          Data sourced from data.gov.sg as of{" "}
+          {new Date(sourceDate || Date.now()).toLocaleDateString()}.
         </p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -49,7 +55,7 @@ export default function PsiDashboard({
           <PsiRegionList regions={summary.regions} />
         </div>
         <div className="lg:col-span-2 min-h-[500px]">
-          {/* Render the new PsiMap and pass the summary data to it */}
+          {/* The PsiMap component now correctly receives the summary data */}
           <PsiMap summary={summary} />
         </div>
       </div>
