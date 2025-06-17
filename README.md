@@ -73,7 +73,7 @@ You will need to have the following software installed on your machine:
     ```
 
 4.  **Configure Environment Variables:**
-    Create a file named `.env.local` in the root of the project and add your secret keys. This file is ignored by Git and will not be committed.
+    This project requires API keys from Twilio to send SMS messages. You may get your own free trial credentials from Twilio.com.Create a file named `.env.local` in the root of the project and add your secret keys. This file is ignored by Git and will not be committed.
 
     ```env
     # .env.local
@@ -82,6 +82,8 @@ You will need to have the following software installed on your machine:
     TWILIO_ACCOUNT_SID="YOUR_TWILIO_ACCOUNT_SID"
     TWILIO_AUTH_TOKEN="YOUR_TWILIO_AUTH_TOKEN"
     TWILIO_PHONE_NUMBER="YOUR_TWILIO_PHONE_NUMBER"
+
+    NEXT_PUBLIC_APP_URL=http://localhost:3000
     ```
 
 ### Running the Project
