@@ -25,7 +25,7 @@ function ClusterItem({ feature }: { feature: DengueFeature }) {
     setIsSending(true);
     setSendStatus("Dispatching alert...");
     try {
-      const response = await fetch("/api/dispatch-alert", {
+      const response = await fetch("/api/dengue-alert", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ area: location, cases: caseCount }),
@@ -68,7 +68,6 @@ function ClusterItem({ feature }: { feature: DengueFeature }) {
         </div>
       </div>
 
-      {/* --- NEW SECTION FOR BUTTONS AND STATUS --- */}
       <div className="flex items-center justify-between mt-3">
         <div>
           {needsTruncation && (

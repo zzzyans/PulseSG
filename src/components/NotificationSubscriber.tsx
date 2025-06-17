@@ -8,24 +8,23 @@ export default function NotificationSubscriber() {
   const [phoneNumber, setPhoneNumber] = useState(""); // State for the phone number input
 
   const handleSubscribe = async () => {
-    // Add validation for the phone number
     if (!phoneNumber || !/^\+\d{10,15}$/.test(phoneNumber)) {
       setStatus("Please enter a valid phone number with country code (e.g., +6512345678).");
       return;
     }
-
+  
     setStatus("Subscribing...");
     try {
-      // --- This is where we simulate a citizen from a specific area ---
-      const area = "Woodgrove View / Woodlands Ave 1 (Blk 307, 308, 340, 341) / Woodlands St 31 (Blk 304, 310, 311, 312, 313, 314, 316, 317, 318, 319) / Woodlands St 32 (Blk 320, 322, 323, 326, 329, 344, 345, 346) / Woodlands St 41 (Blk 402, 408, 418, 419, 420)"; // Hardcode a real area name from your data for testing
-
+      const location = "Woodgrove View / Woodlands Ave 1 (Blk 307, 308, 340, 341) / Woodlands St 31 (Blk 304, 310, 311, 312, 313, 314, 316, 317, 318, 319) / Woodlands St 32 (Blk 320, 322, 323, 326, 329, 344, 345, 346) / Woodlands St 41 (Blk 402, 408, 418, 419, 420)";
+      const region = "north"; 
+  
       await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneNumber, area }),
+        body: JSON.stringify({ phoneNumber, location, region }),
       });
-
-      setStatus(`Subscribed ${phoneNumber} for area: ${area}!`);
+  
+      setStatus(`Subscribed ${phoneNumber} for region: ${region}!`);
     } catch (error) {
       setStatus("Subscription failed.");
       console.error("Failed to subscribe:", error);
