@@ -1,7 +1,7 @@
 // src/components/DengueDashboard.tsx
 "use client";
 
-import { CombinedHealthData } from "@/types";
+import { CombinedHealthData } from "@/types"; 
 import DataCard from "@/components/DataCard";
 import ClusterList from "@/components/ClusterList";
 import dynamic from "next/dynamic";
@@ -14,12 +14,15 @@ const MapDisplay = dynamic(() => import("@/components/MapDisplay"), {
 export default function DengueDashboard({
   geoJsonData,
   summary,
-  sourceDate, 
+  sourceDate,
 }: {
   geoJsonData: GeoJSON.FeatureCollection | null;
   summary: CombinedHealthData["dengueSummary"] | null;
-  sourceDate: string | null; 
+  sourceDate: string | null;
 }) {
+  // FIX: The 'dengueClustersForList' useMemo block has been removed.
+  // ClusterList will now receive the raw geoJsonData and process it internally.
+
   if (!summary || !geoJsonData) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-10">

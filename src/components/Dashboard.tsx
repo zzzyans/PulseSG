@@ -1,53 +1,33 @@
 // src/components/Dashboard.tsx
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { DengueCluster } from "../types";
+import React, { useState } from "react";
+import { CombinedHealthData } from "@/types";
 import DataCard from "./DataCard";
 import ClusterList from "./ClusterList";
 import PsiRegionList from "./PsiRegionList";
 import DataSelector, { DataSet } from "./DataSelector";
 import dynamic from "next/dynamic";
 
-// Mock data for PSI
-import mockPsiData from "../../public/mockdata/mock-psi-data.json";
-
-const MapDisplay = dynamic(() => import("./MapDisplay"), { ssr: false });
+const DengueMap = dynamic(() => import("./MapDisplay"), {
+  ssr: false,
+  loading: () => <p>Loading Dengue Map...</p>,
+});
+const PsiMap = dynamic(() => import("./PsiMap"), {
+  ssr: false,
+  loading: () => <p>Loading PSI Map...</p>,
+});
 
 interface DashboardProps {
-  initialData: DengueCluster[] | null;
-  defaultView: DataSet; // <-- This is the crucial addition
+  healthData: CombinedHealthData | null;
 }
 
-export default function Dashboard({
-  initialData: initialDengueData,
-}: {
-  initialData: DengueCluster[] | null;
-}) {
+export default function Dashboard({ healthData }: DashboardProps) {
   const [activeSet, setActiveSet] = useState<DataSet>("dengue");
 
-  // Memoize calculated values for dengue
-  const dengueStats = useMemo(() => {
-    if (!initialDengueData) return { totalCases: 0, totalClusters: 0 };
-    return {
-      totalCases: initialDengueData.reduce(
-        (sum, cluster) => sum + cluster.caseCount,
-        0
-      ),
-      totalClusters: initialDengueData.length,
-    };
-  }, [initialDengueData]);
-
-  // Memoize calculated values for PSI
-  const psiStats = useMemo(() => {
-    const averagePsi =
-      mockPsiData.reduce((sum, region) => sum + region.psi, 0) /
-      mockPsiData.length;
-    return {
-      averagePsi: Math.round(averagePsi),
-      regionCount: mockPsiData.length,
-    };
-  }, []);
+  const dengueSummary = healthData?.dengueSummary;
+  const psiSummary = healthData?.psiSummary;
+  const dengueGeoJson = healthData?.geoJsonData;
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -55,7 +35,7 @@ export default function Dashboard({
         <DataSelector activeSet={activeSet} onSelect={setActiveSet} />
       </div>
 
-      {/* Conditionally render the entire view based on the active tab */}
+      {/* DENGUE VIEW */}
       {activeSet === "dengue" && (
         <div>
           <div className="mb-8">
@@ -70,18 +50,26 @@ export default function Dashboard({
             <div className="lg:col-span-1 flex flex-col gap-8">
               <DataCard
                 title="Total Active Cases"
-                value={dengueStats.totalCases}
+                value={dengueSummary?.totalCases ?? 0}
                 description="Sum of cases in all clusters."
               />
-              <ClusterList clusters={initialDengueData || []} />
+              <DataCard
+                title="Total Active Clusters"
+                value={dengueSummary?.totalClusters ?? 0}
+                description="Number of active outbreak areas."
+              />
+              {/* FIX: Convert a potential 'undefined' to 'null' */}
+              <ClusterList geoJsonData={dengueGeoJson ?? null} />
             </div>
-            <div className="lg:col-span-2">
-              <MapDisplay />
+            <div className="lg:col-span-2 min-h-[500px]">
+              {/* FIX: Apply the same fix here for consistency */}
+              <DengueMap geoJsonData={dengueGeoJson ?? null} />
             </div>
           </div>
         </div>
       )}
 
+      {/* PSI VIEW */}
       {activeSet === "psi" && (
         <div>
           <div className="mb-8">
@@ -96,13 +84,13 @@ export default function Dashboard({
             <div className="lg:col-span-1 flex flex-col gap-8">
               <DataCard
                 title="Average 24-hr PSI"
-                value={psiStats.averagePsi}
+                value={psiSummary?.nationwideAverage ?? 0}
                 description="Nationwide average reading."
               />
-              <PsiRegionList data={mockPsiData} />
+              <PsiRegionList regions={psiSummary?.regions || {}} />
             </div>
-            <div className="lg:col-span-2">
-              <MapDisplay />
+            <div className="lg:col-span-2 min-h-[500px]">
+              <PsiMap summary={psiSummary || null} />
             </div>
           </div>
         </div>

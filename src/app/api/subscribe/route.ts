@@ -10,7 +10,10 @@ export async function POST(request: Request) {
     }
     await saveSubscriber(phoneNumber, location, region);
     return NextResponse.json({ message: "Subscriber saved." }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ message: "Failed to save subscriber." }, { status: 500 });
+  } catch {
+    return NextResponse.json(
+      { message: "Failed to save subscriber." },
+      { status: 500 },
+    );
   }
 }
