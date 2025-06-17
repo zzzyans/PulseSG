@@ -9,7 +9,7 @@ import NotificationSubscriber from "@/components/NotificationSubscriber";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SG Public Health Command Center",
+  title: "PulseSG",
   description: "Official dashboard for public health monitoring in Singapore.",
 };
 
