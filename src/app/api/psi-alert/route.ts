@@ -1,6 +1,6 @@
-// src/app/api/dispatch-psi-alert/route.ts
+// src/app/api/psi-alert/route.ts
 import { NextResponse } from "next/server";
-import { sendTargetedSms } from "@/lib/sms";
+import { sendPsiAlert } from "@/lib/sms";
 
 export async function POST(request: Request) {
   try {
@@ -21,15 +21,12 @@ export async function POST(request: Request) {
       messageBody += " Healthy persons can continue with normal activities.";
     }
 
-    // The area to target is the region name itself.
-    // This assumes citizens subscribe with an area like "North", "South", etc.
-    const targetArea = region;
+    const targetArea = region.charAt(0).toUpperCase() + region.slice(1);
 
-    // Reuse the existing SMS sending function
-    sendTargetedSms(targetArea, messageBody);
+    sendPsiAlert(targetArea, messageBody);
 
     return NextResponse.json(
-      { message: `PSI alert dispatch initiated for ${region} region.` },
+      { message: `PSI alert dispatch initiated for ${targetArea} region.` },
       { status: 202 } // Accepted
     );
   } catch (error) {

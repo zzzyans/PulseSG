@@ -20,7 +20,7 @@ function PsiRegionItem({ regionData }: { regionData: RegionData }) {
     setIsSending(true);
     setSendStatus("Dispatching alert...");
     try {
-      const response = await fetch("/api/dispatch-psi-alert", {
+      const response = await fetch("/api/psi-alert", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ region, psi, descriptor }),
@@ -57,7 +57,7 @@ function PsiRegionItem({ regionData }: { regionData: RegionData }) {
         <button
           onClick={handleDispatchAlert}
           disabled={isSending}
-          className="bg-orange-500 text-white px-4 py-1.5 rounded-md text-xs font-bold hover:bg-orange-600 transition-colors disabled:bg-orange-300"
+          className="bg-red-500 text-white px-4 py-1.5 rounded-md text-xs font-bold hover:bg-orange-600 transition-colors disabled:bg-orange-300"
         >
           {isSending ? "Sending..." : "Dispatch Alert"}
         </button>
