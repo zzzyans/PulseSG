@@ -34,7 +34,6 @@ export interface CombinedHealthData {
   sourceDate: string;
 }
 
-// This helper type for a single dengue feature remains useful
 export interface DengueFeature extends GeoJSON.Feature {
   properties: {
     OBJECTID: number;
@@ -44,8 +43,3 @@ export interface DengueFeature extends GeoJSON.Feature {
   geometry: GeoJSON.Polygon;
 }
 
-export interface DengueCluster {
-  id: string;
-  location: string;
-  caseCount: number;
-}
