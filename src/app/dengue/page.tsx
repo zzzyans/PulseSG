@@ -1,11 +1,16 @@
 // src/app/dengue/page.tsx
-import { getDengueData } from "@/lib/data";
+import { getCombinedHealthData } from "@/lib/data";
 import DengueDashboard from "@/components/DengueDashboard";
 
 export default async function DenguePage() {
-  // 1. Fetch the complete data object on the server
-  const dengueApiResponse = await getDengueData();
+  const healthData = await getCombinedHealthData();
 
-  // 2. Pass the entire object as a prop to the client component
-  return <DengueDashboard initialData={dengueApiResponse} />;
+  // Pass only the relevant parts of the data to the component
+  return (
+    <DengueDashboard
+      geoJsonData={healthData?.geoJsonData || null}
+      summary={healthData?.dengueSummary || null}
+      sourceDate={healthData?.sourceDate || null}
+    />
+  );
 }

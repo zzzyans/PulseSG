@@ -1,11 +1,10 @@
 // src/app/psi/page.tsx
-import { getPsiData } from "@/lib/data";
-import PsiDashboard from "@/components/PsiDashboard"; // Import the new client component
+import { getCombinedHealthData } from "@/lib/data";
+import PsiDashboard from "@/components/PsiDashboard";
 
 export default async function PsiPage() {
-  // 1. Fetch data on the server
-  const psiData = await getPsiData();
+  const healthData = await getCombinedHealthData();
 
-  // 2. Pass the data as a prop to the client component
-  return <PsiDashboard psiData={psiData} />;
+  // Pass only the relevant PSI summary to the component
+  return <PsiDashboard summary={healthData?.psiSummary || null} />;
 }
