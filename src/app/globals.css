@@ -5,3 +5,10 @@
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
+.psi-map-label {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  color: white;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+}

@@ -35,32 +35,28 @@ const processDengueData = (geoJsonData: any) => {
 
 // PSI
 const processPsiData = (psiApiResponse: any) => {
-  const readings = psiApiResponse?.data?.items?.[0]?.readings?.psi_twenty_four_hourly;
-  const regionMetadata = psiApiResponse?.data?.region_metadata || [];
+  const psiData = psiApiResponse?.data; // Correctly access the 'data' property first
 
-  if (!readings) {
-    console.error("PSI API Error: 'psi_twenty_four_hourly' object could not be found.");
+  if (!psiData || !psiData.items || psiData.items.length === 0) {
+    console.error("PSI API Error: 'items' array is missing or empty.");
     return { nationwideAverage: 0, regions: {}, regionMetadata: [] };
   }
 
-  // --- THIS IS THE CORRECT FIX ---
-  // We will manually calculate the average from the regional values.
+  const readings = psiData.items[0]?.readings?.psi_twenty_four_hourly;
+  if (!readings) {
+    console.error("PSI API Error: 'psi_twenty_four_hourly' data is missing.");
+    return { nationwideAverage: 0, regions: {}, regionMetadata: [] };
+  }
 
-  // 1. Create an array of the regional PSI numbers.
-  const regionalValues = [
-    readings.north,
-    readings.south,
-    readings.east,
-    readings.west,
-    readings.central,
-  ].filter((value): value is number => typeof value === 'number'); // Filter out any undefined/null values
+  const regionMetadata = psiData.regionMetadata || [];
 
-  // 2. Calculate the average only if we have valid numbers.
-  const nationwideAverage = regionalValues.length > 0
+  const regionalValues = Object.values(readings).filter(
+    (value): value is number => typeof value === 'number'
+  );
+  
+  const nationwideAverage = readings.national || (regionalValues.length > 0
     ? Math.round(regionalValues.reduce((sum, val) => sum + val, 0) / regionalValues.length)
-    : 0;
-
-  console.log("Successfully processed PSI data. Manually Calculated Average:", nationwideAverage);
+    : 0);
 
   return {
     nationwideAverage: nationwideAverage,
