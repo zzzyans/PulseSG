@@ -36,27 +36,41 @@ const processDengueData = (geoJsonData: any) => {
 // PSI
 const processPsiData = (psiApiResponse: any) => {
   const readings = psiApiResponse?.data?.items?.[0]?.readings?.psi_twenty_four_hourly;
-  const regionMetadata = psiApiResponse?.data?.regionMetadata || [];
+  const regionMetadata = psiApiResponse?.data?.region_metadata || [];
 
   if (!readings) {
+    console.error("PSI API Error: 'psi_twenty_four_hourly' object could not be found.");
     return { nationwideAverage: 0, regions: {}, regionMetadata: [] };
   }
 
-  const nationwideAverage = readings.national;
+  // 1. Create an array of the regional PSI numbers.
+  const regionalValues = [
+    readings.north,
+    readings.south,
+    readings.east,
+    readings.west,
+    readings.central,
+  ].filter((value): value is number => typeof value === 'number'); // Filter out any undefined/null values
+
+  // 2. Calculate the average only if we have valid numbers.
+  const nationwideAverage = regionalValues.length > 0
+    ? Math.round(regionalValues.reduce((sum, val) => sum + val, 0) / regionalValues.length)
+    : 0;
+
+  console.log("Successfully processed PSI data. Manually Calculated Average:", nationwideAverage);
 
   return {
     nationwideAverage: nationwideAverage,
     regions: {
-      north: readings.north,
-      south: readings.south,
-      east: readings.east,
-      west: readings.west,
-      central: readings.central,
+      north: readings.north || 0,
+      south: readings.south || 0,
+      east: readings.east || 0,
+      west: readings.west || 0,
+      central: readings.central || 0,
     },
-    regionMetadata: regionMetadata 
+    regionMetadata: regionMetadata,
   };
 };
-
 let cache = {
   data: null as any,
   lastFetchDate: ''

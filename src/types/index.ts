@@ -1,9 +1,8 @@
 // src/types/index.ts
 
-// This represents the full API response we get from our backend
-export interface HealthApiResponse {
-  geoJsonData: GeoJSON.FeatureCollection; // Using standard GeoJSON types
-  summary: {
+// This represents the full, combined API response from our backend
+export interface CombinedHealthData {
+  dengueSummary: {
     totalClusters: number;
     totalCases: number;
     topCluster: {
@@ -11,17 +10,33 @@ export interface HealthApiResponse {
       cases: number;
     };
   };
+  psiSummary: {
+    nationwideAverage: number;
+    regions: {
+      north: number;
+      south: number;
+      east: number;
+      west: number;
+      central: number;
+    };
+    regionMetadata: {
+      name: string;
+      label_location: {
+        latitude: number;
+        longitude: number;
+      };
+    }[];
+  };
+  geoJsonData: GeoJSON.FeatureCollection;
   sourceDate: string;
 }
 
-// This is a helper type for a single feature within the GeoJSON data
-// It's useful for the map component
+// This helper type for a single dengue feature remains useful
 export interface DengueFeature extends GeoJSON.Feature {
   properties: {
     OBJECTID: number;
     LOCALITY: string;
     CASE_SIZE: number;
-    // Add other properties from the GeoJSON if you need them
   };
   geometry: GeoJSON.Polygon;
 }

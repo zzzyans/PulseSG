@@ -1,12 +1,13 @@
 // src/components/PsiDashboard.tsx
-"use client"; // Mark as a Client Component
+"use client";
 
-import { PsiData } from "@/lib/data"; // Assuming you export this type from lib/data.ts
+import { CombinedHealthData } from "@/types";
 import DataCard from "@/components/DataCard";
 import PsiRegionList from "@/components/PsiRegionList";
 import dynamic from "next/dynamic";
 
-const MapDisplay = dynamic(() => import("@/components/MapDisplay"), {
+// Dynamically import the NEW PsiMap component
+const PsiMap = dynamic(() => import("@/components/PsiMap"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full bg-slate-200 rounded-lg flex items-center justify-center">
@@ -16,15 +17,17 @@ const MapDisplay = dynamic(() => import("@/components/MapDisplay"), {
 });
 
 export default function PsiDashboard({
-  psiData,
+  summary,
 }: {
-  psiData: PsiData[] | null;
+  summary: CombinedHealthData["psiSummary"] | null;
 }) {
-  const averagePsi = psiData
-    ? Math.round(
-        psiData.reduce((sum, r) => sum + r.psi, 0) / psiData.length
-      )
-    : 0;
+  if (!summary) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-10">
+        Loading PSI Data...
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,14 +42,15 @@ export default function PsiDashboard({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 flex flex-col gap-8">
           <DataCard
-            title="Average 24-hr PSI"
-            value={averagePsi}
-            description="Nationwide average reading."
+            title="Nationwide 24-hr PSI"
+            value={summary.nationwideAverage}
+            description="Average reading across all regions."
           />
-          <PsiRegionList data={psiData || []} />
+          <PsiRegionList regions={summary.regions} />
         </div>
         <div className="lg:col-span-2 min-h-[500px]">
-          <MapDisplay clusters={[]} />
+          {/* Render the new PsiMap and pass the summary data to it */}
+          <PsiMap summary={summary} />
         </div>
       </div>
     </div>
