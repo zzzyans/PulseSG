@@ -16,8 +16,7 @@ export default function HighlightCard({
   level,
   icon,
 }: HighlightCardProps) {
-  // --- THIS IS THE FIX ---
-  // Each level now maps to an OBJECT of separate class strings.
+
   const levelClasses = {
     good: {
       border: "border-green-500",
@@ -39,11 +38,9 @@ export default function HighlightCard({
     },
   };
 
-  // 'currentLevel' is now correctly typed as an object with border, bg, etc.
   const currentLevel = levelClasses[level];
 
   return (
-    // Now, accessing properties like currentLevel.border works perfectly.
     <div
       className={`p-5 rounded-lg border-l-4 shadow-sm flex items-start gap-4 transition-all hover:shadow-md hover:border-blue-500 ${currentLevel.border} ${currentLevel.bg}`}
     >
